@@ -67,4 +67,25 @@ class ApplicationController < ActionController::Base
   def blank_street_to_coords_form
     render({ :template => "meterologist/street_to_coords_form.html.erb"})
   end
+
+  def coords_to_weather_results
+    @latitude = params.fetch("user_latitude")
+    @longitude = params.fetch("user_longitude")
+    url = "https://api.darksky.net/forecast/" + ENV.fetch("DARK_SKY_KEY") + "/" + @latitude + "," + @longitude
+    raw_data = open(url).read
+    parsed_data = JSON.parse(raw_data)
+    results_array = parsed_data.fetch("results")
+    first_result = results_array.at(0)
+    currently_hash = first_result.fetch("currently")
+    @current_temp = currently_hash.fetch("temperature")
+    @current_summary = currently_hash.fetch("summary")
+
+    render({ :template => "meterologist/coords_to_weather_results.html.erb"})
+  end
+
+  # def
+  #   @gt_client = Google::Cloud::Translate.new({ :version => :v2 })
+  #   @translation = @gt_client.translate(some_text, { :to => some_lang })
+
+  # end
 end

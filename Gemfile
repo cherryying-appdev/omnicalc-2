@@ -11,6 +11,8 @@ gem 'puma', '~> 4.1'
 # Use Active Model has_secure_password
 gem 'bcrypt'
 
+# Use Google Translate
+gem "google-cloud-translate", "2.3.0"
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
