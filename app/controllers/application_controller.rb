@@ -48,4 +48,20 @@ class ApplicationController < ActionController::Base
 
     render({ :template => "math_templates/divide_results.html.erb"})
   end
+
+  def street_to_coords_results
+    @user_input = params.fetch("user_street_address")
+    url = "https://maps.googleapis.com/maps/api/geocode/json?address=" + @user_input + "&key=AIzaSyDB6uZXmYRlo88RLhAxD-yxUbMIZd4oHpg"
+    # GOOGLE_MAPS_KEY")
+    raw_data = open(url).read
+    parsed_data = JSON.parse(raw_data)
+    results_array = parsed_data.fetch("results")
+    first_result = results_array.at(0)
+    geometry_hash = first_result.fetch("geometry")
+    location_hash = geometry_hash.fetch("location")
+    @latitude = location_hash.fetch("lat")
+    @longitude = location_hash.fetch("lng")
+
+    render({ :template => "meterologist/street_to_coords_results.html.erb"})
+  end
 end
