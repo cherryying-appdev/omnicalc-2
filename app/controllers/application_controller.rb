@@ -51,8 +51,7 @@ class ApplicationController < ActionController::Base
 
   def street_to_coords_results
     @user_input = params.fetch("user_street_address")
-    url = "https://maps.googleapis.com/maps/api/geocode/json?address=" + @user_input + "&key=AIzaSyDB6uZXmYRlo88RLhAxD-yxUbMIZd4oHpg"
-    # GOOGLE_MAPS_KEY")
+    url = "https://maps.googleapis.com/maps/api/geocode/json?address=" + @user_input + "&key=" + ENV.fetch("GMAPS_KEY")
     raw_data = open(url).read
     parsed_data = JSON.parse(raw_data)
     results_array = parsed_data.fetch("results")
@@ -63,5 +62,9 @@ class ApplicationController < ActionController::Base
     @longitude = location_hash.fetch("lng")
 
     render({ :template => "meterologist/street_to_coords_results.html.erb"})
+  end
+
+  def blank_street_to_coords_form
+    render({ :template => "meterologist/street_to_coords_form.html.erb"})
   end
 end
